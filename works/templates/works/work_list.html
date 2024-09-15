@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>本日の実績</title>
+</head>
+<body>
+    <h1>{{ today }}の実績</h1>
+    <a href="{% url 'work_create' %}">仕事を追加する</a>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.start_time }} - {{ task.end_time }}: {{ task.description }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'work_list_month' %}">今月の実績</a>
+</body>
+</html>

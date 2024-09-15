@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>今月の実績</title>
+</head>
+<body>
+    <h1>{{ this_month }}月の実績</h1>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.start_time }} - {{ task.end_time }}: {{ task.description }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
