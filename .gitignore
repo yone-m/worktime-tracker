@@ -20,7 +20,7 @@ __pycache__/
 
 # Local environment settings
 .env
-settings*.py
+settings.py
 
 # Django stuff:
 staticfiles/
