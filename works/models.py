@@ -10,8 +10,8 @@ class Work(models.Model):
     )
     work_name = models.CharField(max_length=200)
     category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_datetime = models.DateTimeField()
+    end_datetime = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
