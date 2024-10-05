@@ -2,8 +2,10 @@ from django.urls import path
 
 from . import views
 
+app_name = 'work'
+
 urlpatterns = [
-    path("", views.work_list_today, name="work_list_today"),
-    path("month/", views.work_list_month, name="work_list_month"),
-    path("create/", views.work_create, name='work_create')
+    path("list/", views.WorkListToday.as_view(), name="work_list_today"),
+    path("month/", views.WorkListMonth.as_view(), name="work_list_month"),
+    path("create/", views.WorkCreate.as_view(), name='work_create')
 ]

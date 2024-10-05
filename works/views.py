@@ -1,27 +1,50 @@
+from django.db.models.query import QuerySet
+from django.forms import BaseModelForm
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic.edit import CreateView
+from django.views import generic
+from django.urls import reverse_lazy
 from .models import Work
 from .forms import WorkForm
-import datetime
+from datetime import datetime
 
-def work_list_today(request):
-    today = datetime.date.today() 
-    today_str = today.strftime('%Y/%m/%d')
-    works = Work.objects.filter(created_at__date=today)
-    return render(request, 'works/work_list.html', {'works': works, 'today': today_str})
+class WorkListToday(generic.ListView):
+    model = Work
+    context_object_name = "works"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["today"] = datetime.today().strftime("%Y年%m月%d日")
+        return context
+    
+    def get_queryset(self):
+        return super().get_queryset()
+    
+    
+class WorkListMonth(generic.ListView):
+    model = Work
+    context_object_name = "monthly_works"
+    template_name = "work/work_list_month.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["month"] = str(datetime.today().month)
+        return context
 
-def work_list_month(request):
-    this_month = datetime.date.today().month
-    #this_month_str = this_month.strftime('%m')
-    works = Work.objects.filter(created_at__date__month=this_month)
-    return render(request, 'works/work_list_month.html', {'works': works, 'this_month': this_month})
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     return queryset
 
-def work_create(request):
-    if request.method == 'POST':
-        form = WorkForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('work_list_today')
-    else:
-        form = WorkForm()
-    return render(request, 'works/work_form.html', {'form': form})
+class WorkCreate(generic.CreateView):
+    model = Work
+    form_class = WorkForm
+    success_url = reverse_lazy('work:work_list_today')
+    
+    def form_valid(self, form):
+        today_str = datetime.today().strftime("%Y/%m/%d")
+        input_start_time = self.request.POST.get("start_time")
+        input_end_time = self.request.POST.get("end_time")
+        form.instance.start_datetime = datetime.strptime(today_str + " " + input_start_time + ":00", "%Y/%m/%d %H:%M:%S")
+        form.instance.end_datetime = datetime.strptime(today_str + " " + input_end_time, "%Y/%m/%d %H:%M:%S")
+        form.save()
+        return super().form_valid(form)

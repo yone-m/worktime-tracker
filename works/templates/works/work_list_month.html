@@ -4,10 +4,10 @@
     <title>今月の実績</title>
 </head>
 <body>
-    <h1>{{ this_month }}月の実績</h1>
+    <h1>{{ month }}月の実績</h1>
     <ul>
-        {% for task in tasks %}
-            <li>{{ task.start_time }} - {{ task.end_time }}: {{ task.description }}</li>
+        {% for work in monthly_works %}
+            <li>{{ work.start_datetime |date:"n/j H:i" }} - {{ work.end_datetime|date:"n/j H:i" }}: {{ work.work_name }}</li>
         {% endfor %}
     </ul>
 </body>

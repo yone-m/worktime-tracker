@@ -5,12 +5,12 @@
 </head>
 <body>
     <h1>{{ today }}の実績</h1>
-    <a href="{% url 'work_create' %}">仕事を追加する</a>
+    <a href="{% url 'work:work_create' %}">仕事を追加する</a>
     <ul>
-        {% for task in tasks %}
-            <li>{{ task.start_time }} - {{ task.end_time }}: {{ task.description }}</li>
+        {% for work in works %}
+            <li>{{ work.start_datetime|time:"H:i" }} - {{ work.end_datetime|time:"H:i" }}: {{ work.work_name }}</li>
         {% endfor %}
     </ul>
-    <a href="{% url 'work_list_month' %}">今月の実績</a>
+    <a href="{% url 'work:work_list_month' %}">今月の実績</a>
 </body>
 </html>
