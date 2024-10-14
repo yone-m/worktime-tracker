@@ -4,11 +4,12 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Work
 from .forms import WorkForm
 from datetime import datetime
 
-class WorkListToday(generic.ListView):
+class WorkListToday(LoginRequiredMixin, generic.ListView):
     model = Work
     context_object_name = "works"
     
@@ -21,7 +22,7 @@ class WorkListToday(generic.ListView):
         return super().get_queryset()
     
     
-class WorkListMonth(generic.ListView):
+class WorkListMonth(LoginRequiredMixin, generic.ListView):
     model = Work
     context_object_name = "monthly_works"
     template_name = "work/work_list_month.html"
@@ -35,7 +36,7 @@ class WorkListMonth(generic.ListView):
     #     queryset = super().get_queryset()
     #     return queryset
 
-class WorkCreate(generic.CreateView):
+class WorkCreate(LoginRequiredMixin, generic.CreateView):
     model = Work
     form_class = WorkForm
     success_url = reverse_lazy('work:work_list_today')
