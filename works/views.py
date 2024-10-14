@@ -16,6 +16,7 @@ class WorkListToday(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["today"] = datetime.today().strftime("%Y年%m月%d日")
+        context["works"] = context["works"].filter(user=self.request.user)
         return context
     
     def get_queryset(self):
@@ -45,7 +46,8 @@ class WorkCreate(LoginRequiredMixin, generic.CreateView):
         today_str = datetime.today().strftime("%Y/%m/%d")
         input_start_time = self.request.POST.get("start_time")
         input_end_time = self.request.POST.get("end_time")
-        form.instance.start_datetime = datetime.strptime(today_str + " " + input_start_time + ":00", "%Y/%m/%d %H:%M:%S")
-        form.instance.end_datetime = datetime.strptime(today_str + " " + input_end_time, "%Y/%m/%d %H:%M:%S")
+        form.instance.start_datetime = datetime.strptime(today_str + " " + input_start_time, "%Y/%m/%d %H:%M")
+        form.instance.end_datetime = datetime.strptime(today_str + " " + input_end_time, "%Y/%m/%d %H:%M")
+        form.instance.user = self.request.user
         form.save()
         return super().form_valid(form)
